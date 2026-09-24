@@ -29,7 +29,12 @@ class PermintaanPerubahanController extends Controller
             ->where('status', '!=', 'completed')
             ->get();
 
-        return view('anggota.permintaan-perubahan.create', compact('penugasan'));
+        $targetPenugasan = Penugasan::with(['jadwal.jenisPekerjaan', 'anggota'])
+        ->where('anggota_id', '!=', Auth::id())
+        ->where('status', '!=', 'completed')
+        ->get();
+
+        return view('anggota.permintaan-perubahan.create', compact('penugasan', 'targetPenugasan'));
     }
 
     public function store(Request $request): RedirectResponse
